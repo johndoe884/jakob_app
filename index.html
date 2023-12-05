@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Gallery</title>
+    </head>
+
+    <body>
+        <style>
+            @import url(https://fonts.googleapis.com/css?family=Montserrat:500);
+
+            :root {
+                font-size: 10px;
+            }
+
+            *,
+            *::before,
+            *::after {
+                box-sizing: border-box;
+            }
+
+            body {
+                min-height: 100vh;
+                background-color: #fafafa;
+            }
+
+            .container {
+                max-width: 100rem;
+                margin: 0 auto;
+                padding: 0 2rem 2rem;
+            }
+
+            .heading {
+                font-family: "Montserrat", Arial, sans-serif;
+                font-size: 4rem;
+                font-weight: 500;
+                line-height: 1.5;
+                text-align: center;
+                padding: 3.5rem 0;
+                color: #1a1a1a;
+            }
+
+            .heading span {
+                display: block;
+            }
+
+            .gallery {
+                display: flex;
+                flex-wrap: wrap;
+                margin: -1rem -1rem;
+            }
+
+            .gallery-item {
+                flex: 1 0 24rem;
+                margin: 1rem;
+                box-shadow: 0.3rem 0.4rem 0.4rem rgba(0, 0, 0, 0.4);
+                overflow: hidden;
+            }
+
+            .gallery-image {
+                display: block;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                transition: transform 400ms ease-out;
+            }
+
+            .gallery-image:hover {
+                transform: scale(1.15);
+            }
+
+            @supports (display: grid) {
+                .gallery {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(24rem, 1fr));
+                    grid-gap: 2rem;
+                }
+
+                .gallery,
+                .gallery-item {
+                    margin: 0;
+                }
+            }
+        </style>
+        <div class="container">
+
+            <h1 class="heading">Image Gallery <span>Jackob LAB4</span></h1>
+            <div class="gallery" id="gallery">
+
+            </div>
+
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/aws-sdk@2.1077.0/dist/aws-sdk.min.js"></script>
+
+        <script>
+            AWS.config.region = 'us-east-1';
+            const s3 = new AWS.S3();
+            const BUCKET_NAME = "jakob-lab4-test-bucket"
+            const BUCKET_URL = `https://${BUCKET_NAME}.s3.amazonaws.com/`;
+
+            function getImagesFromS3Bucket() {
+                const params = {
+                    Bucket: BUCKET_NAME,
+                };
+
+                s3.listObjects(params, function (err, data) {
+                    if (err) {
+                        console.error('Error retrieving images from S3 bucket:', err);
+                    } else {
+                        console.log(newImg.src)
+                        data.Contents.forEach(function (object) {
+                            console.log(object.key)
+                            displayImage(object.Key);
+                        });
+                    }
+                });
+            }
+
+            function displayImage(image_key) {
+                var galleryElement = document.getElementById("gallery");
+                var newDiv = document.createElement('div');
+                newDiv.className = 'gallery-item';
+
+                var newImg = document.createElement('img');
+                newImg.className = 'gallery-image';
+                newImg.src = `${BUCKET_URL}/${image_key}`;
+                console.log(newImg.src)
+
+                newDiv.appendChild(newImg);
+                galleryElement.appendChild(newDiv);
+            }
+
+            getImagesFromS3Bucket()
+
+        </script>
+    </body>
+
+</html>
