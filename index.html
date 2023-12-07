@@ -85,57 +85,37 @@
             }
         </style>
         <div class="container">
-
             <h1 class="heading">Image Gallery <span>Jackob LAB4</span></h1>
             <div class="gallery" id="gallery">
-
+                <div class="gallery-item">
+                    <img class="gallery-image" src="./media/123.jpg" alt="">
+                </div>
+                <div class="gallery-item">
+                    <img class="gallery-image" src="./media/134.jpeg" alt="">
+                </div>
+                <div class="gallery-item">
+                    <img class="gallery-image" src="./media/asdc.jpg" alt="">
+                </div>
+                <div class="gallery-item">
+                    <img class="gallery-image" src="./media/flower1.jpg" alt="">
+                </div>
+                <div class="gallery-item">
+                    <img class="gallery-image" src="./media/saasd.jpg" alt="">
+                </div>
+                <div class="gallery-item">
+                    <img class="gallery-image" src="./media/tree0.jpg" alt="">
+                </div>
+                <div class="gallery-item">
+                    <img class="gallery-image" src="./media/tree1.jpg" alt="">
+                </div>
+                <div class="gallery-item">
+                    <img class="gallery-image" src="./media/tree2.jpg" alt="">
+                </div>
+                <div class="gallery-item">
+                    <img class="gallery-image" src="./media/tree3.jpg" alt="">
+                </div>
             </div>
-
         </div>
-
-        <script src="https://cdn.jsdelivr.net/npm/aws-sdk@2.1077.0/dist/aws-sdk.min.js"></script>
-
-        <script>
-            AWS.config.region = 'us-east-1';
-            const s3 = new AWS.S3();
-            const BUCKET_NAME = "jakob-lab4-test-bucket"
-            const BUCKET_URL = `https://${BUCKET_NAME}.s3.amazonaws.com/`;
-
-            function getImagesFromS3Bucket() {
-                const params = {
-                    Bucket: BUCKET_NAME,
-                };
-
-                s3.listObjects(params, function (err, data) {
-                    if (err) {
-                        console.error('Error retrieving images from S3 bucket:', err);
-                    } else {
-                        console.log(newImg.src)
-                        data.Contents.forEach(function (object) {
-                            console.log(object.key)
-                            displayImage(object.Key);
-                        });
-                    }
-                });
-            }
-
-            function displayImage(image_key) {
-                var galleryElement = document.getElementById("gallery");
-                var newDiv = document.createElement('div');
-                newDiv.className = 'gallery-item';
-
-                var newImg = document.createElement('img');
-                newImg.className = 'gallery-image';
-                newImg.src = `${BUCKET_URL}/${image_key}`;
-                console.log(newImg.src)
-
-                newDiv.appendChild(newImg);
-                galleryElement.appendChild(newDiv);
-            }
-
-            getImagesFromS3Bucket()
-
-        </script>
     </body>
 
 </html>
